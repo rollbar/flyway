@@ -174,7 +174,7 @@ public class Flyway {
      * The file name suffix for shell migrations. (default: .sql)
      * <p/>
      * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
-     * which using the defaults translates to V1_1__My_description.sql</p>
+     * which using the defaults translates to V1_1__My_description.shell</p>
      */
     private String shellMigrationSuffix = ".shell";
 
