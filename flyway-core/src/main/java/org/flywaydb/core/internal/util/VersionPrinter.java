@@ -42,6 +42,6 @@ public class VersionPrinter {
         }
         printed = true;
         String version = new ClassPathResource("org/flywaydb/core/internal/version.txt", classLoader).loadAsString("UTF-8");
-        LOG.info("Flyway " + version + " by Boxfuse XXX");
+        LOG.info("Flyway " + version + " by Boxfuse");
     }
 }
