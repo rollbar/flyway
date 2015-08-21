@@ -107,6 +107,30 @@ public class FlywayExtension {
      */
     String sqlMigrationSuffix
 
+    /**
+     * The file name prefix for shell migrations
+     *
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     */
+    String shellMigrationPrefix
+
+    /**
+     * The file name separator for shell migrations
+     *
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     */
+    String shellMigrationSeparator
+
+    /**
+     * The file name suffix for shell migrations
+     *
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     */
+    String shellMigrationSuffix
+
     /** The encoding of Sql migrations */
     String encoding
 

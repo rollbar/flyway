@@ -224,6 +224,39 @@ abstract class AbstractFlywayMojo extends AbstractMojo {
     private String sqlMigrationSuffix = flyway.getSqlMigrationSuffix();
 
     /**
+     * The file name prefix for shell migrations (default: V) <p>Also configurable with Maven or System Property:
+     * ${flyway.shellMigrationPrefix}</p>
+     *
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     *
+     * @parameter property="flyway.shellMigrationPrefix"
+     */
+    private String shellMigrationPrefix = flyway.getShellMigrationPrefix();
+
+    /**
+     * The file name separator for shell migrations (default: __) <p>Also configurable with Maven or System Property:
+     * ${flyway.shellMigrationSeparator}</p>
+     *
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     *
+     * @parameter property="flyway.shellMigrationSeparator"
+     */
+    private String shellMigrationSeparator = flyway.getShellMigrationSeparator();
+
+    /**
+     * The file name suffix for shell migrations (default: .shell) <p>Also configurable with Maven or System Property:
+     * ${flyway.shellMigrationSuffix}</p>
+     *
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     *
+     * @parameter property="flyway.shellMigrationSuffix"
+     */
+    private String shellMigrationSuffix = flyway.getShellMigrationSuffix();
+
+    /**
      * Whether to automatically call clean or not when a validation error occurs. (default: {@code false})<br/>
      * <p> This is exclusively intended as a convenience for development. Even tough we
      * strongly recommend not to change migration scripts once they have been checked into SCM and run, this provides a
@@ -482,6 +515,9 @@ abstract class AbstractFlywayMojo extends AbstractMojo {
             flyway.setSqlMigrationPrefix(sqlMigrationPrefix);
             flyway.setSqlMigrationSeparator(sqlMigrationSeparator);
             flyway.setSqlMigrationSuffix(sqlMigrationSuffix);
+            flyway.setShellMigrationPrefix(shellMigrationPrefix);
+            flyway.setShellMigrationSeparator(shellMigrationSeparator);
+            flyway.setShellMigrationSuffix(shellMigrationSuffix);
             flyway.setCleanOnValidationError(cleanOnValidationError);
             flyway.setOutOfOrder(outOfOrder);
             flyway.setTargetAsString(target);

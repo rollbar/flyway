@@ -157,7 +157,8 @@ public class Main {
      * @param properties The properties object to initialize.
      */
     private static void initializeDefaults(Properties properties) {
-        properties.put("flyway.locations", "filesystem:" + new File(getInstallationDir(), "sql").getAbsolutePath());
+        properties.put("flyway.locations", "filesystem:" + new File(getInstallationDir(), "sql").getAbsolutePath()
+                + ",filesystem:" + new File(getInstallationDir(), "scripts").getAbsolutePath());
         properties.put("flyway.jarDirs", new File(getInstallationDir(), "jars").getAbsolutePath());
     }
 
