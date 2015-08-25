@@ -23,9 +23,9 @@ import org.flywaydb.core.internal.util.scanner.Resource;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -55,12 +55,18 @@ public class ShellMigrationExecutor implements MigrationExecutor {
         String scriptLocation = this.shellScriptResource.getLocationOnDisk();
         LOG.info("Executing: " + scriptLocation);
         try {
-            Process p = Runtime.getRuntime().exec(scriptLocation);
-            inheritIO(p.getInputStream(), System.out);
-            inheritIO(p.getErrorStream(), System.err);
-            p.waitFor();
-            if (p.exitValue() != 0) {
-                LOG.error("Exit value: " + p.exitValue());
+            List<String> args = new ArrayList<String>();
+            args.add(scriptLocation);
+            ProcessBuilder builder = new ProcessBuilder(args);
+            builder.redirectErrorStream(true);
+            Process process = builder.start();
+            Scanner in = new Scanner(process.getInputStream());
+            while (in.hasNextLine()) {
+                System.out.println("| " + in.nextLine());
+            }
+            int returnCode = process.waitFor();
+            if (returnCode != 0) {
+                LOG.error("Exit value: " + returnCode);
                 throw new FlywayException("Unable to apply migration");
             }
         }
@@ -70,16 +76,6 @@ public class ShellMigrationExecutor implements MigrationExecutor {
         }
     }
 
-    private static void inheritIO(final InputStream src, final PrintStream dest) {
-        new Thread(new Runnable() {
-            public void run() {
-                Scanner sc = new Scanner(src);
-                while (sc.hasNextLine()) {
-                    dest.println("> " + sc.nextLine());
-                }
-            }
-        }).start();
-    }
     @Override
     public boolean executeInTransaction() {
         return true;
