@@ -257,6 +257,14 @@ abstract class AbstractFlywayMojo extends AbstractMojo {
     private String shellMigrationSuffix = flyway.getShellMigrationSuffix();
 
     /**
+     * The arguments to be passed to shell migrations <p>Also configurable with Maven or System Property:
+     * ${flyway.shellMigrationArgs}</p>
+     *
+     * @parameter property="flyway.shellMigrationArgs"
+     */
+    private String shellMigrationArgs = flyway.getShellMigrationArgs();
+
+    /**
      * Whether to automatically call clean or not when a validation error occurs. (default: {@code false})<br/>
      * <p> This is exclusively intended as a convenience for development. Even tough we
      * strongly recommend not to change migration scripts once they have been checked into SCM and run, this provides a

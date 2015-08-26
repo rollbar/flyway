@@ -400,6 +400,13 @@ public abstract class AbstractFlywayTask extends Task {
     }
 
     /**
+     * @param shellMigrationArgs The arguments to be passed to shell migrations<br>Also configurable with Ant Property: ${flyway.shellMigrationArgs}
+     */
+    public void setShellMigrationArgs(String shellMigrationArgs) {
+        flyway.setShellMigrationArgs(shellMigrationArgs);
+    }
+
+    /**
      * @param target The target version up to which Flyway should consider migrations.
      *               Migrations with a higher version number will be ignored.
      *               The special value {@code current} designates the current version of the schema. (default: the latest version)<br>Also configurable with Ant Property: ${flyway.target}

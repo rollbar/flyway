@@ -42,21 +42,28 @@ public class ShellMigrationExecutor implements MigrationExecutor {
     private final Resource shellScriptResource;
 
     /**
+     * The args to be passed to the shell script.
+     */
+    private final String shellMigrationArgs;
+
+    /**
      * Creates a new shell script migration based on this shell script.
      *
      * @param shellScriptResource   The resource containing the sql script.
      */
-    public ShellMigrationExecutor(Resource shellScriptResource) {
+    public ShellMigrationExecutor(Resource shellScriptResource, String shellMigrationArgs) {
         this.shellScriptResource = shellScriptResource;
+        this.shellMigrationArgs = shellMigrationArgs;
     }
 
     @Override
     public void execute(Connection connection) {
         String scriptLocation = this.shellScriptResource.getLocationOnDisk();
-        LOG.info("Executing: " + scriptLocation);
+        LOG.info("Executing: " + scriptLocation + " " + shellMigrationArgs);
         try {
             List<String> args = new ArrayList<String>();
             args.add(scriptLocation);
+            args.add(shellMigrationArgs);
             ProcessBuilder builder = new ProcessBuilder(args);
             builder.redirectErrorStream(true);
             Process process = builder.start();

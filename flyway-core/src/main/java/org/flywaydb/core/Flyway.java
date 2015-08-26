@@ -179,6 +179,11 @@ public class Flyway {
     private String shellMigrationSuffix = ".shell";
 
     /**
+     * The args to be passed to shell migrations.
+     */
+    private String shellMigrationArgs = "";
+
+    /**
      * Ignores failed future migrations when reading the metadata table. These are migrations that were performed by a
      * newer deployment of the application that are not yet available in this version. For example: we have migrations
      * available on the classpath up to version 3.0. The metadata table indicates that a migration to version 4.0
@@ -444,6 +449,13 @@ public class Flyway {
      * @return The file name suffix for shell migrations. (default: .shell)
      */
     public String getShellMigrationSuffix() { return shellMigrationSuffix; }
+
+    /**
+     * Retrieves the args to be passed to shell migrations.
+     *
+     * @return The args to be passed to shell migrations
+     */
+    public String getShellMigrationArgs() { return shellMigrationArgs; }
 
     /**
      * Whether to ignore failed future migrations when reading the metadata table. These are migrations that
@@ -848,6 +860,15 @@ public class Flyway {
      */
     public void setShellMigrationSuffix(String shellMigrationSuffix) {
         this.shellMigrationSuffix = shellMigrationSuffix;
+    }
+
+    /**
+     * Sets the arguments to be passed to shell migrations.
+     *
+     * @param shellMigrationArgs The arguments to be passed to shell migrations
+     */
+    public void setShellMigrationArgs(String shellMigrationArgs) {
+        this.shellMigrationArgs = shellMigrationArgs;
     }
 
     /**
@@ -1311,7 +1332,7 @@ public class Flyway {
     private MigrationResolver createMigrationResolver(DbSupport dbSupport) {
         return new CompositeMigrationResolver(dbSupport, classLoader, locations,
                 encoding, sqlMigrationPrefix, sqlMigrationSeparator, sqlMigrationSuffix,
-                shellMigrationPrefix, shellMigrationSeparator, shellMigrationSuffix,
+                shellMigrationPrefix, shellMigrationSeparator, shellMigrationSuffix, shellMigrationArgs,
                 createPlaceholderReplacer(),
                 resolvers);
     }
@@ -1384,6 +1405,10 @@ public class Flyway {
         String shellMigrationSuffixProp = properties.getProperty("flyway.shellMigrationSuffix");
         if (shellMigrationSuffixProp != null) {
             setShellMigrationSuffix(shellMigrationSuffixProp);
+        }
+        String shellMigrationArgsProp = properties.getProperty("flyway.shellMigrationArgs");
+        if (shellMigrationArgsProp != null) {
+            setShellMigrationArgs(shellMigrationArgsProp);
         }
         String encodingProp = properties.getProperty("flyway.encoding");
         if (encodingProp != null) {

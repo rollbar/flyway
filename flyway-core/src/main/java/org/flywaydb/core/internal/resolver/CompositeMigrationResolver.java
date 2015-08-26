@@ -65,6 +65,7 @@ public class CompositeMigrationResolver implements MigrationResolver {
      * @param shellMigrationPrefix     The file name prefix for shell migrations.
      * @param shellMigrationSeparator  The file name separator for shell migrations.
      * @param shellMigrationSuffix     The file name suffix for shell migrations.
+     * @param shellMigrationArgs       The arguments to be passed to shell migrations.
      * @param placeholderReplacer      The placeholder replacer to use.
      * @param customMigrationResolvers Custom Migration Resolvers.
      */
@@ -72,6 +73,7 @@ public class CompositeMigrationResolver implements MigrationResolver {
                                       String encoding,
                                       String sqlMigrationPrefix, String sqlMigrationSeparator, String sqlMigrationSuffix,
                                       String shellMigrationPrefix, String shellMigrationSeparator, String shellMigrationSuffix,
+                                      String shellMigrationArgs,
                                       PlaceholderReplacer placeholderReplacer,
                                       MigrationResolver... customMigrationResolvers) {
         for (Location location : locations.getLocations()) {
@@ -79,7 +81,7 @@ public class CompositeMigrationResolver implements MigrationResolver {
                     encoding, sqlMigrationPrefix, sqlMigrationSeparator, sqlMigrationSuffix));
             migrationResolvers.add(new JdbcMigrationResolver(classLoader, location));
             migrationResolvers.add(new ShellMigrationResolver(classLoader, location, shellMigrationPrefix,
-                    shellMigrationSeparator, shellMigrationSuffix));
+                    shellMigrationSeparator, shellMigrationSuffix, shellMigrationArgs));
 
             if (new FeatureDetector(classLoader).isSpringJdbcAvailable()) {
                 migrationResolvers.add(new SpringJdbcMigrationResolver(classLoader, location));

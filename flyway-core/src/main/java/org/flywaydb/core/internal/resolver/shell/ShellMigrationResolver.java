@@ -69,6 +69,11 @@ public class ShellMigrationResolver implements MigrationResolver {
     private final String shellMigrationSuffix;
 
     /**
+     * The args to be passed to shell migrations
+     */
+    private final String shellMigrationArgs;
+
+    /**
      * Creates a new instance.
      *
      * @param classLoader             The ClassLoader for loading migrations on the classpath.
@@ -76,14 +81,17 @@ public class ShellMigrationResolver implements MigrationResolver {
      * @param shellMigrationPrefix    The prefix for shell migrations
      * @param shellMigrationSeparator The separator for shell migrations
      * @param shellMigrationSuffix    The suffix for shell migrations
+     * @param shellMigrationArgs      The arguments to be passed to shell migrations
      */
     public ShellMigrationResolver(ClassLoader classLoader, Location location, String shellMigrationPrefix,
-                                  String shellMigrationSeparator, String shellMigrationSuffix) {
+                                  String shellMigrationSeparator, String shellMigrationSuffix,
+                                  String shellMigrationArgs) {
         this.scanner = new Scanner(classLoader);
         this.location = location;
         this.shellMigrationPrefix = shellMigrationPrefix;
         this.shellMigrationSeparator = shellMigrationSeparator;
         this.shellMigrationSuffix = shellMigrationSuffix;
+        this.shellMigrationArgs = shellMigrationArgs;
     }
 
     public List<ResolvedMigration> resolveMigrations() {
@@ -93,7 +101,7 @@ public class ShellMigrationResolver implements MigrationResolver {
         for (Resource resource : resources) {
             ResolvedMigrationImpl resolvedMigration = extractMigrationInfo(resource);
             resolvedMigration.setPhysicalLocation(resource.getLocationOnDisk());
-            resolvedMigration.setExecutor(new ShellMigrationExecutor(resource));
+            resolvedMigration.setExecutor(new ShellMigrationExecutor(resource, shellMigrationArgs));
 
             migrations.add(resolvedMigration);
         }

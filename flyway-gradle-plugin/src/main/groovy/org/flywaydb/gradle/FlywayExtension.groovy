@@ -131,6 +131,9 @@ public class FlywayExtension {
      */
     String shellMigrationSuffix
 
+    /** The args to be passed to shell migrations */
+    String shellMigrationArgs
+
     /** The encoding of Sql migrations */
     String encoding
 
