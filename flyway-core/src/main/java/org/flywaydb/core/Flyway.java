@@ -155,6 +155,35 @@ public class Flyway {
     private String sqlMigrationSuffix = ".sql";
 
     /**
+     * The file name prefix for shell migrations. (default: V)
+     * <p/>
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     */
+    private String shellMigrationPrefix = "V";
+
+    /**
+     * The file name separator for sql migrations. (default: __)
+     * <p/>
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     */
+    private String shellMigrationSeparator = "__";
+
+    /**
+     * The file name suffix for shell migrations. (default: .sql)
+     * <p/>
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     */
+    private String shellMigrationSuffix = ".shell";
+
+    /**
+     * The args to be passed to shell migrations.
+     */
+    private String shellMigrationArgs = "";
+
+    /**
      * Ignores failed future migrations when reading the metadata table. These are migrations that were performed by a
      * newer deployment of the application that are not yet available in this version. For example: we have migrations
      * available on the classpath up to version 3.0. The metadata table indicates that a migration to version 4.0
@@ -390,6 +419,43 @@ public class Flyway {
     public String getSqlMigrationSuffix() {
         return sqlMigrationSuffix;
     }
+
+    /**
+     * Retrieves the file name prefix for shell migrations.
+     * <p/>
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     *
+     * @return The file name prefix for shell migrations. (default: V)
+     */
+    public String getShellMigrationPrefix() { return shellMigrationPrefix; }
+
+    /**
+     * Retrieves the file name separator for shell migrations.
+     * <p/>
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     *
+     * @return The file name separator for shell migrations. (default: __)
+     */
+    public String getShellMigrationSeparator() { return shellMigrationSeparator; }
+
+    /**
+     * Retrieves the file name suffix for shell migrations.
+     * <p/>
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     *
+     * @return The file name suffix for shell migrations. (default: .shell)
+     */
+    public String getShellMigrationSuffix() { return shellMigrationSuffix; }
+
+    /**
+     * Retrieves the args to be passed to shell migrations.
+     *
+     * @return The args to be passed to shell migrations
+     */
+    public String getShellMigrationArgs() { return shellMigrationArgs; }
 
     /**
      * Whether to ignore failed future migrations when reading the metadata table. These are migrations that
@@ -756,6 +822,53 @@ public class Flyway {
      */
     public void setSqlMigrationSuffix(String sqlMigrationSuffix) {
         this.sqlMigrationSuffix = sqlMigrationSuffix;
+    }
+
+    /**
+     * Sets the file name prefix for shell migrations.
+     * <p/>
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     *
+     * @param shellMigrationPrefix The file name prefix for shell migrations (default: V)
+     */
+    public void setShellMigrationPrefix(String shellMigrationPrefix) { this.shellMigrationPrefix = shellMigrationPrefix; }
+
+    /**
+     * Sets the file name separator for shell migrations.
+     * <p/>
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     *
+     * @param shellMigrationSeparator The file name separator for shell migrations (default: __)
+     */
+    public void setShellMigrationSeparator(String shellMigrationSeparator) {
+        if (!StringUtils.hasLength(shellMigrationSeparator)) {
+            throw new FlywayException("shellMigrationSeparator cannot be empty!");
+        }
+
+        this.shellMigrationSeparator = shellMigrationSeparator;
+    }
+
+    /**
+     * Sets the file name suffix for shell migrations.
+     * <p/>
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     *
+     * @param shellMigrationSuffix The file name suffix for shell migrations (default: .shell)
+     */
+    public void setShellMigrationSuffix(String shellMigrationSuffix) {
+        this.shellMigrationSuffix = shellMigrationSuffix;
+    }
+
+    /**
+     * Sets the arguments to be passed to shell migrations.
+     *
+     * @param shellMigrationArgs The arguments to be passed to shell migrations
+     */
+    public void setShellMigrationArgs(String shellMigrationArgs) {
+        this.shellMigrationArgs = shellMigrationArgs;
     }
 
     /**
@@ -1218,7 +1331,9 @@ public class Flyway {
      */
     private MigrationResolver createMigrationResolver(DbSupport dbSupport) {
         return new CompositeMigrationResolver(dbSupport, classLoader, locations,
-                encoding, sqlMigrationPrefix, sqlMigrationSeparator, sqlMigrationSuffix, createPlaceholderReplacer(),
+                encoding, sqlMigrationPrefix, sqlMigrationSeparator, sqlMigrationSuffix,
+                shellMigrationPrefix, shellMigrationSeparator, shellMigrationSuffix, shellMigrationArgs,
+                createPlaceholderReplacer(),
                 resolvers);
     }
 
@@ -1278,6 +1393,22 @@ public class Flyway {
         String sqlMigrationSuffixProp = properties.getProperty("flyway.sqlMigrationSuffix");
         if (sqlMigrationSuffixProp != null) {
             setSqlMigrationSuffix(sqlMigrationSuffixProp);
+        }
+        String shellMigrationPrefixProp = properties.getProperty("flyway.shellMigrationPrefix");
+        if (shellMigrationPrefixProp != null) {
+            setShellMigrationPrefix(shellMigrationPrefixProp);
+        }
+        String shellMigrationSeparatorProp = properties.getProperty("flyway.shellMigrationSeparator");
+        if (shellMigrationSeparatorProp != null) {
+            setShellMigrationSeparator(shellMigrationSeparatorProp);
+        }
+        String shellMigrationSuffixProp = properties.getProperty("flyway.shellMigrationSuffix");
+        if (shellMigrationSuffixProp != null) {
+            setShellMigrationSuffix(shellMigrationSuffixProp);
+        }
+        String shellMigrationArgsProp = properties.getProperty("flyway.shellMigrationArgs");
+        if (shellMigrationArgsProp != null) {
+            setShellMigrationArgs(shellMigrationArgsProp);
         }
         String encodingProp = properties.getProperty("flyway.encoding");
         if (encodingProp != null) {

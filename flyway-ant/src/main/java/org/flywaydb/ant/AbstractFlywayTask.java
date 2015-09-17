@@ -370,6 +370,43 @@ public abstract class AbstractFlywayTask extends Task {
     }
 
     /**
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     *
+     * @param shellMigrationPrefix The file name prefix for shell migrations (default: V)<br>Also configurable with Ant Property: ${flyway.shellMigrationPrefix}
+     */
+    public void setShellMigrationPrefix(String shellMigrationPrefix) {
+        flyway.setShellMigrationPrefix(shellMigrationPrefix);
+    }
+
+    /**
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     *
+     * @param shellMigrationSeparator The file name separator for shell migrations (default: V)<br>Also configurable with Ant Property: ${flyway.shellMigrationSeparator}
+     */
+    public void setShellMigrationSeparator(String shellMigrationSeparator) {
+        flyway.setShellMigrationSeparator(shellMigrationSeparator);
+    }
+
+    /**
+     * <p>Shell migrations have the following file name structure: prefixVERSIONseparatorDESCRIPTIONsuffix ,
+     * which using the defaults translates to V1_1__My_description.shell</p>
+     *
+     * @param shellMigrationSuffix The file name suffix for shell migrations (default: .sql)<br>Also configurable with Ant Property: ${flyway.shellMigrationSuffix}
+     */
+    public void setShellMigrationSuffix(String shellMigrationSuffix) {
+        flyway.setShellMigrationSuffix(shellMigrationSuffix);
+    }
+
+    /**
+     * @param shellMigrationArgs The arguments to be passed to shell migrations<br>Also configurable with Ant Property: ${flyway.shellMigrationArgs}
+     */
+    public void setShellMigrationArgs(String shellMigrationArgs) {
+        flyway.setShellMigrationArgs(shellMigrationArgs);
+    }
+
+    /**
      * @param target The target version up to which Flyway should consider migrations.
      *               Migrations with a higher version number will be ignored.
      *               The special value {@code current} designates the current version of the schema. (default: the latest version)<br>Also configurable with Ant Property: ${flyway.target}

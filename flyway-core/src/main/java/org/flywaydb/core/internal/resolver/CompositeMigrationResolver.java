@@ -22,6 +22,7 @@ import org.flywaydb.core.internal.dbsupport.DbSupport;
 import org.flywaydb.core.internal.resolver.jdbc.JdbcMigrationResolver;
 import org.flywaydb.core.internal.resolver.spring.SpringJdbcMigrationResolver;
 import org.flywaydb.core.internal.resolver.sql.SqlMigrationResolver;
+import org.flywaydb.core.internal.resolver.shell.ShellMigrationResolver;
 import org.flywaydb.core.internal.util.FeatureDetector;
 import org.flywaydb.core.internal.util.Location;
 import org.flywaydb.core.internal.util.Locations;
@@ -61,18 +62,26 @@ public class CompositeMigrationResolver implements MigrationResolver {
      * @param sqlMigrationPrefix       The file name prefix for sql migrations.
      * @param sqlMigrationSeparator    The file name separator for sql migrations.
      * @param sqlMigrationSuffix       The file name suffix for sql migrations.
+     * @param shellMigrationPrefix     The file name prefix for shell migrations.
+     * @param shellMigrationSeparator  The file name separator for shell migrations.
+     * @param shellMigrationSuffix     The file name suffix for shell migrations.
+     * @param shellMigrationArgs       The arguments to be passed to shell migrations.
      * @param placeholderReplacer      The placeholder replacer to use.
      * @param customMigrationResolvers Custom Migration Resolvers.
      */
     public CompositeMigrationResolver(DbSupport dbSupport, ClassLoader classLoader, Locations locations,
                                       String encoding,
                                       String sqlMigrationPrefix, String sqlMigrationSeparator, String sqlMigrationSuffix,
+                                      String shellMigrationPrefix, String shellMigrationSeparator, String shellMigrationSuffix,
+                                      String shellMigrationArgs,
                                       PlaceholderReplacer placeholderReplacer,
                                       MigrationResolver... customMigrationResolvers) {
         for (Location location : locations.getLocations()) {
             migrationResolvers.add(new SqlMigrationResolver(dbSupport, classLoader, location, placeholderReplacer,
                     encoding, sqlMigrationPrefix, sqlMigrationSeparator, sqlMigrationSuffix));
             migrationResolvers.add(new JdbcMigrationResolver(classLoader, location));
+            migrationResolvers.add(new ShellMigrationResolver(classLoader, location, shellMigrationPrefix,
+                    shellMigrationSeparator, shellMigrationSuffix, shellMigrationArgs));
 
             if (new FeatureDetector(classLoader).isSpringJdbcAvailable()) {
                 migrationResolvers.add(new SpringJdbcMigrationResolver(classLoader, location));

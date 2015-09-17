@@ -63,6 +63,14 @@
         </fileSet>
         <fileSet>
             <directory>src/main/assembly</directory>
+            <outputDirectory>/scripts</outputDirectory>
+            <includes>
+                <include>put-your-shell-script-migrations-here.txt</include>
+            </includes>
+            <fileMode>644</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/assembly</directory>
             <outputDirectory>/jars</outputDirectory>
             <includes>
                 <include>put-your-java-migration-jars-here.txt</include>
